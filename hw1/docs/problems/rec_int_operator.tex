@@ -1,0 +1,77 @@
+\documentclass{article}[11pt]
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{cancel}
+\usepackage{ntheorem}
+\renewcommand{\qedsymbol}{\rule{0.7em}{0.7em}}
+
+\newtheorem{lemma}{Lemma}[section]
+\newtheorem{result}{Result}[section]
+
+\makeatletter
+\newcommand{\chapterauthor}[1]{%
+  {\parindent0pt\vspace*{-25pt}%
+  \linespread{1.1}\large\scshape#1%
+  \par\nobreak\vspace*{35pt}}
+  \@afterheading%
+}
+\makeatother
+
+%\title{Homework 1}
+\author{Christian Howard}
+%\date{\today}
+
+
+
+
+\begin{document}
+   %\maketitle
+   
+   \section{Wrapping Many Integrations into One}
+   \textbf{Author}: Christian Howard \\
+   Using the problem statement, we can define the following integral operators:
+   
+   \begin{align}
+   D^{-1} \phi (x) &= \int_0^x \phi(y) dy \\
+   D^{-n} \phi (x) &= \frac{1}{(n-1)!}\int_0^x (x-y)^{n-1}\phi(y) dy 
+   \end{align}
+   
+   Given the above operators, the goal is to prove $D^{-n} \phi (x)$ is correct for all positive integers $n$. To do this, let us first recall the following based on previous work:
+   
+   \begin{lemma} \label{l1}
+   Given two integral operators, $F\phi(x)$ and $G\phi(x)$, and their corresponding kernels, $k_1(\cdot,\cdot)$ and $k_2(\cdot,\cdot)$, the kernel $k_3(\cdot,\cdot)$ within $(G \circ F)\phi(x)$ can be found using:
+	   \begin{align*}
+	   k_3(x,y) = \int_y^x k_2(x,z) k_1(z,y) dz 
+	   \end{align*}
+   \end{lemma}
+   
+   Next, let us define $P(n,x) = D^{-n}\phi(x)$. Using this, we can first check that $P(n,x)$ satisfies the base case, where $n=1$, by doing the following:
+   
+   \begin{align*}
+   P(1,x) &= \frac{1}{(1-1)!}\int_0^x (x-y)^{1-1}\phi(y) dy \\
+   &= \int_0^x \phi(y) dy \\
+   &= D^{-1}\phi(x)
+   \end{align*}
+   
+   Now let us assume that $P(n,x)$ holds for $0 \leq n \leq k$. We can then find $P(k+1,x)$ by first noting the following relationship:
+   \begin{align*}
+   P(k+1,x) &= (D^{-1} \circ D^{-k})\phi(x) = \int_0^x K(x,y) \phi(y) dy
+   \end{align*}
+   
+   Using our inductive hypothesis that $P(k,x)$ holds and Lemma \ref{l1}, we can find the resulting kernel, $K(\cdot,\cdot)$, for $(D^{-1} \circ D^{-k})\phi(x)$ to be the following:
+   
+   \begin{align*}
+   K(x,y) &= \int_y^x \frac{(x-z)^{k-1}}{(k-1)!} dz \\
+   &= \left( -\frac{(x-z)^{k}}{k(k-1)!} \right]_y^x \\
+   &= \frac{(x-y)^{k}}{k!}
+   \end{align*}
+   
+   With the above kernel, we can find the final form for $P(k+1,x)$ to be:
+   \begin{align*}
+   P(k+1,x) &= \frac{1}{k!}\int_0^x (x-y)^{k} \phi(y) dy \\
+   &= D^{-(k+1)}\phi(x)
+   \end{align*}
+   
+   Thus, the form of $P(k+1,x)$ matches the result for $P(n,x)$ when $n=k+1$, proving by induction that $P(n,x)$ holds $\forall n \in \mathbb{N}^{+}$.
+   
+\end{document}

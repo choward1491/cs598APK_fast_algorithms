@@ -1,0 +1,64 @@
+\documentclass{article}[11pt]
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{cancel}
+\renewcommand{\qedsymbol}{\rule{0.7em}{0.7em}}
+
+\newtheorem{lemma}{Result}[section]
+
+\makeatletter
+\newcommand{\chapterauthor}[1]{%
+  {\parindent0pt\vspace*{-25pt}%
+  \linespread{1.1}\large\scshape#1%
+  \par\nobreak\vspace*{35pt}}
+  \@afterheading%
+}
+\makeatother
+
+%\title{Homework 1}
+\author{Christian Howard}
+%\date{\today}
+
+
+
+
+\begin{document}
+   %\maketitle
+   
+   \section{Iterated Integral Operators}
+   \textbf{Author}: Christian Howard \\
+   In the problem statement, we can define the following integral operators:
+   
+   \begin{align}
+   F \phi (x) &= \int_a^x k_1(x,y) \phi(y) dy \\
+   G \phi (x) &= \int_a^x k_2(x,y) \phi(y) dy 
+   \end{align}
+   
+   Given the above operators, the goal is to find $k_3(x,y)$ $\ni$
+   
+   \begin{align}
+   G(F\phi)(x) = (G \circ F)\phi(x) = \int_a^x k_3(x,y) \phi(y) dy
+   \end{align}
+   
+   
+   \begin{lemma}
+   The resulting kernel within $(G \circ F)\phi(x)$ is:
+	   \begin{align*}
+	   k_3(x,y) = \int_y^x k_2(x,z) k_1(z,y) dz 
+	   \end{align*}
+   \end{lemma}
+   
+   \begin{proof}
+   \begin{align*}
+   (G \circ F)\phi(x) &= \int_a^x k_2(x,z) F\phi(z) dz \\
+   &= \int_a^x k_2(x,z) \int_a^z k_1(z,y) \phi(y) dy dz \\
+   &= \int_a^x \phi(y) \int_a^x k_2(x,z) k_1(z,y)  dz dy - \int_a^x k_2(x,z) \cancelto{0}{\int_z^x k_1(z,y) \phi(y) dy} dz \\
+   &= \int_a^x \phi(y) \cancelto{0}{\int_a^y k_2(x,z) k_1(z,y)  dz} dy + \int_a^x \phi(y) \int_y^x k_2(x,z) k_1(z,y)  dz dy \\
+   &=  \int_a^x \phi(y) \int_y^x k_2(x,z) k_1(z,y)  dz dy \\
+   &=  \int_a^x k_3(x,y) \phi(y) dy \\
+   \therefore k_3(x,y) &= \int_y^x k_2(x,z) k_1(z,y) dz
+   \end{align*}
+   \end{proof}
+   
+\end{document}
