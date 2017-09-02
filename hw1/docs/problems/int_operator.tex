@@ -35,7 +35,13 @@
    G \phi (x) &= \int_a^x k_2(x,y) \phi(y) dy 
    \end{align}
    
-   Given the above operators, the goal is to find $k_3(x,y)$ $\ni$
+   Since we are relating these integral operators to upper/triangular matrices, I make the following assumption based on the integral operator bounds:
+   
+   \begin{align}
+   k_1(x,y) = k_2(x,y) = 0 \;\;\forall y > x
+   \end{align}
+   
+   Given the above operators and properties, the goal is to find $k_3(x,y)$ $\ni$
    
    \begin{align}
    G(F\phi)(x) = (G \circ F)\phi(x) = \int_a^x k_3(x,y) \phi(y) dy

@@ -33,7 +33,7 @@
    
    \begin{align}
    D^{-1} \phi (x) &= \int_0^x \phi(y) dy \\
-   D^{-n} \phi (x) &= \frac{1}{(n-1)!}\int_0^x (x-y)^{n-1}\phi(y) dy 
+   D^{-n} \phi (x) &= \frac{1}{(n-1)!}\int_0^x (x-y)^{n-1}\phi(y) dy \label{eqn}
    \end{align}
    
    Given the above operators, the goal is to prove $D^{-n} \phi (x)$ is correct for all positive integers $n$. To do this, let us first recall the following based on previous work:
@@ -45,20 +45,19 @@
 	   \end{align*}
    \end{lemma}
    
-   Next, let us define $P(n,x) = D^{-n}\phi(x)$. Using this, we can first check that $P(n,x)$ satisfies the base case, where $n=1$, by doing the following:
+   To proceed in proving (\ref{eqn}) is correct, we can first check that (\ref{eqn}) satisfies the base case, where $n=1$, by doing the following:
    
    \begin{align*}
-   P(1,x) &= \frac{1}{(1-1)!}\int_0^x (x-y)^{1-1}\phi(y) dy \\
-   &= \int_0^x \phi(y) dy \\
-   &= D^{-1}\phi(x)
+   \left. D^{-n} \phi (x)\right|_{n=1} &= \frac{1}{(1-1)!}\int_0^x (x-y)^{1-1}\phi(y) dy \\
+   &= \int_0^x \phi(y) dy 
    \end{align*}
    
-   Now let us assume that $P(n,x)$ holds for $0 \leq n \leq k$. We can then find $P(k+1,x)$ by first noting the following relationship:
+   Now let us assume that (\ref{eqn}) holds for $0 \leq n \leq k$. We can then find $D^{-(k+1)}\phi(x)$ by first noting the following relationship:
    \begin{align*}
-   P(k+1,x) &= (D^{-1} \circ D^{-k})\phi(x) = \int_0^x K(x,y) \phi(y) dy
+   D^{-(k+1)}\phi(x) &= (D^{-1} \circ D^{-k})\phi(x) = \int_0^x K(x,y) \phi(y) dy
    \end{align*}
    
-   Using our inductive hypothesis that $P(k,x)$ holds and Lemma \ref{l1}, we can find the resulting kernel, $K(\cdot,\cdot)$, for $(D^{-1} \circ D^{-k})\phi(x)$ to be the following:
+   Using our inductive hypothesis that $D^{-k}\phi(x)$ holds and Lemma \ref{l1}, we can find the resulting kernel, $K(\cdot,\cdot)$, for $(D^{-1} \circ D^{-k})\phi(x)$ to be the following:
    
    \begin{align*}
    K(x,y) &= \int_y^x \frac{(x-z)^{k-1}}{(k-1)!} dz \\
@@ -66,12 +65,11 @@
    &= \frac{(x-y)^{k}}{k!}
    \end{align*}
    
-   With the above kernel, we can find the final form for $P(k+1,x)$ to be:
+   With the above kernel, we can find the final form for $D^{-(k+1)}\phi(x)$ to be:
    \begin{align*}
-   P(k+1,x) &= \frac{1}{k!}\int_0^x (x-y)^{k} \phi(y) dy \\
-   &= D^{-(k+1)}\phi(x)
+   D^{-(k+1)}\phi(x) &= \frac{1}{k!}\int_0^x (x-y)^{k} \phi(y) dy
    \end{align*}
    
-   Thus, the form of $P(k+1,x)$ matches the result for $P(n,x)$ when $n=k+1$, proving by induction that $P(n,x)$ holds $\forall n \in \mathbb{N}^{+}$.
+   Thus, the form of $D^{-(k+1)}\phi(x)$ matches (\ref{eqn}) when $n=k+1$, completing the induction step. Now by the principle of induction, (\ref{eqn}) holds $\forall n \in \mathbb{N}^{+}$.
    
 \end{document}
