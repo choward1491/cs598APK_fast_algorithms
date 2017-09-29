@@ -1,0 +1,12 @@
+\select@language {english}
+\contentsline {section}{\numberline {1}Algorithm Design}{3}
+\contentsline {subsection}{\numberline {1.1}Algorithm 1 - Baseline}{4}
+\contentsline {subsection}{\numberline {1.2}Algorithm 2 - Interpolative Decomposition}{4}
+\contentsline {section}{\numberline {2}Computational Complexity}{6}
+\contentsline {subsection}{\numberline {2.1}Algorithm 1 - Baseline}{6}
+\contentsline {subsection}{\numberline {2.2}Algorithm 2 - Interpolative Decomposition}{6}
+\contentsline {subsection}{\numberline {2.3}Discussion of Algorithms}{7}
+\contentsline {section}{\numberline {3} Complexity of Finding Low-rank Projection Matrix }{8}
+\contentsline {subsection}{\numberline {3.1}Nominal Non-Adaptive Range Finder}{8}
+\contentsline {subsection}{\numberline {3.2}Subsampled Random Fourier Transform Non-Adaptive Range Finder}{8}
+\contentsline {section}{\numberline {4}Prove One Statement is True}{9}

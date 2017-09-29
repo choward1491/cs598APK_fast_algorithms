@@ -1,0 +1,278 @@
+\documentclass{article}[11pt]
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{cancel}
+\usepackage{enumitem}
+\renewcommand{\qedsymbol}{\rule{0.7em}{0.7em}}
+%\renewcommand{\theenumi}{\Alph{enumi}.}
+
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+%\usepackage[nottoc]{tocbibind} %Adds "References" to the table of contents
+
+\newtheorem{lemma}{Result}[section]
+
+\makeatletter
+\newcommand{\chapterauthor}[1]{%
+  {\parindent0pt\vspace*{-25pt}%
+  \linespread{1.1}\large\scshape#1%
+  \par\nobreak\vspace*{35pt}}
+  \@afterheading%
+}
+\makeatother
+
+\title{Homework 2 \\ Problem 1 - Working with Low-Rank Approximations}
+\author{Christian Howard \\ howard28@illinois.edu }
+\date{}
+
+
+
+
+\begin{document}
+   \maketitle
+   
+   \newpage
+   
+   \tableofcontents
+   
+   \newpage
+   
+   \section{Algorithm Design}
+   In the problem statement for this part, we are to come up with an algorithm to tackle least square problems $Ax \cong b$ given that $A \in \mathbb{R}^{m \times n}$ is low rank and approximated as $A \approx QB$, where $B = Q^{T}A$ with $m > n \geq k$ and $Q \in \mathbb{R}^{m \times k}$. Additionally, for cases where the least square solution is not unique, i.e. when $k < n$, we are asked to add that the solution $x$ will minimize $|x|_2$. 
+   
+   If we first assume that $k=n$, we can find the least square solution by finding $x^* = \arg \min_{x} J(x)$ where $J(x)$ is defined below as:
+   
+   \begin{align*}
+   J(x) &= (Ax - b)^T (Ax-b) \\
+      &= x^TA^TAx - 2x^T A^T b + b^Tb
+   \end{align*}   
+   
+   If we differentiate with respect to $x^T$, we can find the solution by doing the following:
+   
+   \begin{align*}
+   \frac{\partial J}{\partial x^T} = 0 &= 2A^TAx^* - 2A^T b \\
+   &= A^TAx^* - A^T b 
+   \end{align*}
+   
+   which implies a solution of:
+   
+   \begin{align*}
+   x^* = \left(A^T A\right)^{-1} A^Tb
+   \end{align*}    
+   
+  If we assume $A$ is in the form of a Singular Value Decomposition, i.e. $A = U\Sigma V^T$, then we can show the following solution for the Least Square solution when $k = n$:
+  
+     \begin{align}
+   x^* &= \left(V \Sigma U^T U \Sigma V^T\right)^{-1} V \Sigma U^T b \nonumber\\
+   &= \left(V \Sigma^2 V^T\right)^{-1} V \Sigma U^T b \nonumber\\
+   &= V \Sigma^{-2} V^T V \Sigma U^T b \nonumber\\
+   &= V \Sigma^{-1} U^T b \nonumber \\
+   &= V \Sigma^{+} U^T b \label{eq:ls1}
+   \end{align}    
+   
+   where $\Sigma^{+}$ is the pseudoinverse of $\Sigma$ where basically all non-zero diagonal elements are replaced by their reciprocals. Now let us assume that $k < n$ so that we need to enforce that the solution $x^*$ must also minimize $|x|_2$. We can find this solution $x^*$ by solving the following optimization problem based on Lagrange Multipliers:
+   
+   \begin{align*}
+   (x^*,\lambda^*) &= \arg \min_{x,\lambda} J(x,\lambda) \\
+   \text{where } J(x,\lambda) &= x^Tx + \lambda^T\left(Ax - b\right)
+   \end{align*}
+   
+    If we differentiate $J(\cdot,\cdot)$ with respect to $x^T$ and $\lambda^T$, we get:
+    
+    \begin{align*}
+    \frac{\partial J}{\partial x^T} = 0 &= 2x^* + A^T\lambda^* \\
+    \frac{\partial J}{\partial \lambda^T} = 0 &= Ax^* - b
+    \end{align*}
+    
+    The first equation implies $x^* = -\frac{1}{2} A^T \lambda$, the second leads to $\lambda^* = -2 (A A^T)^{-1}b$. With these relationships, we find the solution for $x^*$ is the following:
+    
+    \begin{align*}
+    x^* &= A^T \left(A A^T\right)^{-1}b
+    \end{align*}
+    
+    If we again substitute the SVD form of $A$ into the expression for $x^*$, we can obtain the following:
+    \begin{align}
+   x^* &= V \Sigma U^T \left( U \Sigma V^T V \Sigma U^T \right)^{-1} b \nonumber  \\
+   &=V \Sigma U^T \left( U \Sigma^2 U^T \right)^{-1} b \nonumber \\
+   &= V \Sigma U^T U \Sigma^{-2} U^T  b \nonumber \\
+   &= V \Sigma^{-1} U^T  b \nonumber \\
+   &= V \Sigma^{+} U^T  b \label{eq:ls2}
+   \end{align}    
+    
+    What becomes obvious is that if we compare (\ref{eq:ls1}) with (\ref{eq:ls2}), the two solutions are identical. This means that using the SVD form of $A$ to solve the Least Square problem works when $k \leq n$ and enforces minimizing $|x|_2$ when $k < n$. With this information, the algorithms we come up with only need to use the information we have to construct efficient SVD decompositions and then the rest is trivial.
+   
+   \subsection{Algorithm 1 - Baseline}
+   \begin{enumerate}
+   \item Find SVD of $A = QB$
+   		\begin{enumerate}
+   		\item Find SVD of $B \ni B = \hat{U}\Sigma V^T$
+   		\item Define $U = Q\hat{U} \ni A = U \Sigma V^T$ 
+   		\end{enumerate}
+   \item Compute $x^* = V \Sigma^{+} U^T b$
+   \end{enumerate}
+   
+   \subsection{Algorithm 2 - Interpolative Decomposition}
+   \begin{enumerate}
+   \item Find SVD of $A = QB$
+   		\begin{enumerate}
+   		\item Find $J$ and $P$ using an Interpolative Decomposition $\ni Q^{T} = Q^{T}_{(:,J)}P^T$
+   		\item Compute QR factorization $(A_{(J,:)})^T = \bar{Q}\bar{R}$
+   		\item Upsample row coefficients, $Z = P\bar{R}^T$
+   		\item Compute SVD of $Z \ni Z = U \Sigma \hat{V}^T$
+   		\item Define $V^T = \hat{V}^T \bar{Q}^T \ni A = U \Sigma V^T$
+   		\end{enumerate}
+   \item Compute $x^* = V \Sigma^{+} U^T b$
+   \end{enumerate}
+   
+   \newpage
+   \section{Computational Complexity}
+   Before going into the complexity analysis, I want to first note that \cite{labook} states that a Full Householder QR factorization of some matrix $A \in \mathbb{R}^{m \times n}$ is $O(m^2n)$. Additionally, I will use the $n$-Truncated R-SVD such that for some matrix $A \in \mathbb{R}^{m \times n}$ where $m \geq n$, the complexity is $O(mn^2)$. For use in analyzing the Interpolative Decomposition (ID), most of the heavy lifting of ID is based on the Column Pivoted QR Algorithm with complexity $O(mnk)$ for a matrix $A \in \mathbb{R}^{m \times n}$ that is rank $k$. These complexities will be used to describe the algorithms below.
+   
+   \subsection{Algorithm 1 - Baseline}
+   \begin{enumerate}
+   \item Find SVD of $A = QB$ for $A \in \mathbb{R}^{m \times n}$, $Q \in \mathbb{R}^{m \times k}$, and $B \in \mathbb{R}^{k \times n}$
+   		\begin{enumerate}
+   		\item Find SVD of $B \ni B = \hat{U}\Sigma V^T$. Note that $\hat{U} \in \mathbb{R}^{k \times k}$, $\Sigma \in \mathbb{R}^{k \times k}$, and $V \in \mathbb{R}^{n \times k}$
+   			\begin{itemize}
+   			\item Complexity: $O(nk^2)$
+   			\end{itemize}
+   		\item Define $U = Q\hat{U} \ni A = U \Sigma V^T$ 
+   			\begin{itemize}
+   			\item Complexity: $O(m k^2)$
+   			\end{itemize}
+   		\end{enumerate}
+   \item Compute $x^* = V \Sigma^{+} U^T b$
+   		\begin{enumerate}
+   		\item Compute $\Sigma^{+}$ from $\Sigma$
+   			\begin{itemize}
+   			\item Complexity: $O(k)$
+   			\end{itemize}
+   		\item Define $q_1 = U^{T}b$ 
+   			\begin{itemize}
+   			\item Complexity: $O(km)$
+   			\end{itemize}
+   		\item Define $q_2 = \Sigma^{+}q_1$ 
+   			\begin{itemize}
+   			\item Complexity: $O(k^2)$
+   			\end{itemize}
+   		\item Define $x^* = Vq_2$ 
+   			\begin{itemize}
+   			\item Complexity: $O(kn)$
+   			\end{itemize}
+   		\end{enumerate}
+   \end{enumerate}
+   
+   The overall complexity of Algorithm 1 as $O(n k^2 + m k^2 + km) \in O(m k^2)$.
+   
+   \subsection{Algorithm 2 - Interpolative Decomposition}
+   \begin{enumerate}
+   \item Find SVD of $A = QB$
+   		\begin{enumerate}
+   		\item Find $J$ and $P$ using an Interpolative Decomposition $\ni Q^{T} = Q^{T}_{(:,J)}P^T$
+   			\begin{itemize}
+   			\item Complexity: $O(m k^2)$
+   			\end{itemize}
+   		\item Compute QR factorization $(A_{(J,:)})^T = \bar{Q}\bar{R}$
+   			\begin{itemize}
+   			\item Compute $C = (A_{(J,:)})(A_{(J,:)})^T \rightarrow O(mk^2)$
+   			\item Compute $\bar{R} = \text{cholesky}(C) \rightarrow O(k^3)$
+   			\item Compute $\bar{R}^{-1}$ $\rightarrow O(k^3)$
+   			\item Compute $\bar{Q} = (A_{(J,:)})^T\bar{R}^{-1} \rightarrow O(mk^2)$
+   			\end{itemize}
+   		\item Upsample row coefficients, $Z = P\bar{R}^T$
+   			\begin{itemize}
+   			\item Complexity: $O(m k^2 )$
+   			\end{itemize}
+   		\item Compute SVD of $Z \in \mathbb{R}^{m \times k} \ni Z = U \Sigma \hat{V}^T$
+   			\begin{itemize}
+   			\item Complexity: $O(m k^2)$
+   			\end{itemize}
+   		\item Define $V^T = \hat{V}^T \bar{Q}^T \ni A = U \Sigma V^T$
+   			\begin{itemize}
+   			\item Complexity: $O(m k^2)$
+   			\end{itemize}
+   		\end{enumerate}
+   \item Compute $x^* = V \Sigma^{+} U^T b \rightarrow O(km)$
+   \end{enumerate}
+   
+   The overall complexity of Algorithm 2 is $O(mk^2)$.
+   
+\subsection{Discussion of Algorithms}
+So what is interesting to note between the algorithms is they are both of complexity $O(m n^2)$ when $k = n$ since both could benefit from the Truncated R-SVD algorithm. This appears to be a different result than what is talked about in lecture since it is assumed the SVD of $B \in \mathbb{R}^{k \times n}$ in Algorithm 1 should be $O(n^2k)$, but if we can construct the SVD of $Z \in \mathbb{R}^{m \times k}$  in $O(mk^2)$, then we should be able to also construct the SVD of $B$ in $O(nk^2)$. This obviously goes against what is mentioned in the lecture notes, so not sure where the disparity lies.
+   
+   \newpage
+   \section{ Complexity of Finding Low-rank Projection Matrix }
+   \subsection{Nominal Non-Adaptive Range Finder}
+   \begin{enumerate}
+   \item Construct random matrix $\Omega \in \mathbb{R}^{n \times k} \rightarrow O(nk)$
+   \item Get measurements from $A$ by doing $Y = A\Omega \rightarrow O(mnk)$
+   \item Perform $l$ iterations of the following based on the Power Iteration:
+   		\begin{itemize}
+   		\item Perform QR of $Y \ni Y = \hat{Q} \hat{R} \rightarrow O(m^2k)$
+   		\item Perform QR of $T = A^T \hat{Q}_{(:,1:k)}  \ni T = \bar{Q}\bar{R} \rightarrow O(mnk + n^2k)$
+   		\item Perform $Y = A \bar{Q}_{(:,1:k)} \rightarrow O(nmk)$
+   		\end{itemize}
+   \item Perform QR of $Y \ni Y = \hat{Q} \hat{R} \rightarrow O(m^2k)$
+   \item Return $Q = \hat{Q}_{(:,1:k)} \rightarrow O(mk)$
+   \end{enumerate}
+   
+   The overall complexity of the Non-adaptive Range Finder is $O(m^2 k)$ since this is the dominant complexity term throughout the algorithm.
+   
+   \subsection{Subsampled Random Fourier Transform Non-Adaptive Range Finder}
+   This SRFT Range Finder is based on algorithms described in \cite{fdft} that allow one to speed up the nominal FFT and inverse FFT computations when you only care about either a subset of inputs points or a subset of output points. That said, I do not see how we can use this to speed up the computation of $Y = A\Omega^{'}$, where $\Omega^{'}$ is defined as:
+   
+   \begin{align*}
+   \Omega^{'} &= \sqrt{\frac{n}{k}} D F R
+   \end{align*}
+   
+   where 
+   
+   \begin{itemize}
+   \item $D$ is an $n \times n$ diagonal matrix whose entries are independent random variables uniformly distributed on the complex unit circle
+   \item $F$ is the unitary $n \times n$ DFT matrix based on the relationship \\ $$F_{pq} = \frac{1}{\sqrt{n}} e^{-2\pi i (p-1) (q-1) / n}$$
+   \item $R$ is an $n\times k$ matrix that samples $k$ coordinates from $n$ uniformly at random, i.e., its $k$ columns are drawn randomly without replacement from the columns of the $n\times n$ identity matrix
+   \end{itemize}
+   
+   \newpage
+   \section{Prove One Statement is True}
+   We are given that $C$ is a square, low-rank matrix. Given this information, show that exactly one of the below statements are true:
+   
+   \begin{enumerate}[label=(\Alph*)]
+   \item The linear system $(I-C)x = b$ has a solution $x$
+   \item The linear system $(I-C)^Ty = 0$ has a solution $y$ such that $y^Tb \neq 0$
+   \end{enumerate}
+   
+   For only one of the above statements to be true, we must show $A \iff \neg B$. To do this, we must show that $A \rightarrow \neg B$ and $\neg B \rightarrow A$. To prove $A \rightarrow \neg B$, let us assume $A$ is true and that $(I-C)^Ty = 0$ for some $y$. Then we have:
+   
+   \begin{align*}
+   (I-C)x &= b \\
+   y^T(I - C)x &= y^Tb \\
+   0 &= y^Tb
+   \end{align*}
+   
+   Since $y^Tb = 0$, $B$ cannot be true when $A$ is true, implying that $A \rightarrow \neg B$. Now let us assume $\neg A$ and that $(I-C)^Ty = 0$ for some $y$. Then we have:
+   
+   \begin{align*}
+   (I-C)x &\neq b \\
+   y^T(I-C)x & \neq y^Tb  \\
+   0 &\neq  y^Tb
+   \end{align*}
+   
+   The above result implies $\neg  A \rightarrow B$ since both $(I-C)^Ty = 0$ and $y^Tb \neq 0$ were satisfied. Since $\neg A \rightarrow B$ is the contrapositive of $\neg B \rightarrow A$, we have now shown $ A \iff \neg B$. This proves that only $A$ or $B$ can be true for some low-rank matrix $C$.
+   
+   
+   
+\begin{thebibliography}{9}
+\bibitem{labook} 
+Gene H. Golub, Charles F. Van Loan. 
+\textit{Matrix Computations 4\textsuperscript{th} Edition}. 
+The John Hopkins University Press, Baltimore, Maryland, 2013.
+ 
+\bibitem{fdft} 
+Henrik V. Sorensen, C. Sidney Burrus.
+\textit{Efficient Computation of the DFT with Only a Subset of Input or Output Points}.
+IEEE Transactions on Signal Processing, Volume: 41, Issue: 3, pgs. 1184 - 1200, Mar 1993.
+\end{thebibliography}
+
+\end{document}
