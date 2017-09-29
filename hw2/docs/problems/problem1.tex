@@ -217,7 +217,7 @@ So what is interesting to note between the algorithms is they are both of comple
    \item Return $Q = \hat{Q}_{(:,1:k)} \rightarrow O(mk)$
    \end{enumerate}
    
-   The overall complexity of the Non-adaptive Range Finder is $O(m^2 k)$ since this is the dominant complexity term throughout the algorithm.
+   The overall complexity of the Non-adaptive Range Finder is $O(m^2 k)$ since this is the dominant complexity term throughout the algorithm. We can see here that this nominal Non-Adaptive Range Finder is slower than the approximate SVD computation algorithms described above by a factor of $m$ which is taken as being large.
    
    \subsection{Subsampled Random Fourier Transform Non-Adaptive Range Finder}
    This SRFT Range Finder is based on algorithms described in \cite{fdft} that allow one to speed up the nominal FFT and inverse FFT computations when you only care about either a subset of inputs points or a subset of output points. That said, I do not see how we can use this to speed up the computation of $Y = A\Omega^{'}$, where $\Omega^{'}$ is defined as:
