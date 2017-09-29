@@ -9,4 +9,4 @@
 \contentsline {section}{\numberline {3} Complexity of Finding Low-rank Projection Matrix }{8}
 \contentsline {subsection}{\numberline {3.1}Nominal Non-Adaptive Range Finder}{8}
 \contentsline {subsection}{\numberline {3.2}Subsampled Random Fourier Transform Non-Adaptive Range Finder}{8}
-\contentsline {section}{\numberline {4}Prove One Statement is True}{9}
+\contentsline {section}{\numberline {4}Prove One Statement is True}{10}
