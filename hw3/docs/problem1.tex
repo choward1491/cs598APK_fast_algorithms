@@ -1,0 +1,182 @@
+\documentclass{article}[11pt]
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{cancel}
+\usepackage{enumitem}
+\renewcommand{\qedsymbol}{\rule{0.7em}{0.7em}}
+%\renewcommand{\theenumi}{\Alph{enumi}.}
+
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+%\usepackage[nottoc]{tocbibind} %Adds "References" to the table of contents
+
+\newcommand{\bvec}[1]{\boldsymbol{#1}}
+
+\newtheorem{lemma}{Result}[section]
+
+\makeatletter
+\newcommand{\chapterauthor}[1]{%
+  {\parindent0pt\vspace*{-25pt}%
+  \linespread{1.1}\large\scshape#1%
+  \par\nobreak\vspace*{35pt}}
+  \@afterheading%
+}
+\makeatother
+
+\title{Homework 3 - Problem 1\\ Multipole Translation Operators: Theory}
+\author{Christian Howard \\ howard28@illinois.edu }
+\date{}
+
+
+
+
+\begin{document}
+   \maketitle
+   
+   \newpage
+   
+   \tableofcontents
+   
+   \newpage
+  
+   \section{Multi-index Notation}
+   Before diving into the theoretical developments, let us briefly define the notation that will be used. Let us first define an exponent tuple as some tuple $q = \left(q_1, q_2, \cdots, q_d\right)$ where each element is an exponent for each independent dimension of some vector. Based on this, let us then define the following operations based on this exponent tuple:
+
+   \begin{align*}
+    |q| &= \sum_{i=1}^d q_i \\
+    q! &= \prod_{i=1} q_i ! \\
+    \bvec{x}^q &= \prod_{i=1}^d x_i^{q_i} \\
+    \binom{q}{p} &= \prod_{i=1}^d \binom{q_i}{p_i} \\
+    q \pm p &= \left(q_1 \pm p_1, q_2 \pm p_2, \cdots q_d \pm p_d\right) \\
+    D_{x}^q f(\bvec{x}) &= \frac{\partial^{|q|} f(\bvec{x})}{\partial^{q_1}x_1 \partial^{q_2}x_2 \cdots \partial^{q_d}x_d}
+   \end{align*}
+
+   where $q$, $p$ are exponent tuples and $\bvec{x}$ is some vector in $\mathbb{R}^d$. For additional clarity, note that the usage of $\sum_{|p|\leq m}$ denotes summing across all tuples $p$ that have $|p| \leq m$ and that $\sum_{p\leq q}$ is summing across all tuples $p$ such that each element in $p$ is less than or equal to its associated element within the tuple $q$. With these defined, we can proceed with attacking the problem.
+
+   \section{Multipole to Multipole Translation}
+   \subsection{Translation Derivation and Discussion}
+   Multipole expansions are a fundamental tool for helping approximate equations of the form:
+
+   \begin{align*}
+    \psi(\bvec{x}) &= \sum_{j=1}^n w_j G(\bvec{x},\bvec{y}^{(j)})
+   \end{align*}
+
+   where we $\bvec{x}$ is a source coordinate, $\bvec{y}^{(j)}$ is the $j^{th}$ source coordinate, and $G(\cdot,\cdot)$ is some kernel function. A truncated multipole expansion for the above expression could then be represented as:
+
+   \begin{align*}
+    \psi(\bvec{x}) &\approx \sum_{j=1}^n w_j \sum_{|p| \leq k} \frac{ \left. D_{y}^{p}(\bvec{x},\bvec{y}) \right|_{\bvec{y}=\bvec{c}}}{p!} (\bvec{y}^{(j)} - \bvec{c})^{p} \\
+            &= \sum_{|p| \leq k} \frac{ \left. D_{y}^{p}(\bvec{x},\bvec{y}) \right|_{\bvec{y}=\bvec{c}}}{p!} \sum_{j=1}^n w_j (\bvec{y}^{(j)} - \bvec{c})^{p} \\
+            &= \sum_{|p| \leq k} \frac{ \left. D_{y}^{p}(\bvec{x},\bvec{y}) \right|_{\bvec{y}=\bvec{c}}}{p!} \alpha_p
+   \end{align*}
+
+   where $k$ is the complete expansion order, $\alpha_p = \sum_{j=1}^n w_j (\bvec{y}^{(j)} - \bvec{c})^{p}$ and $\bvec{c}$ is some center coordinate to do the multipole expansion from. Now given we have performed the above multipole expansion about center $\bvec{c}$, the goal is to construct an expansion about some other location $\bvec{\hat{c}}$ that can reuse some of the work done when constructing the multipole expansion about $\bvec{c}$. If we write out the multipole expansion about the new center, we will find the following expression:
+
+   \begin{align*}
+    \psi(\bvec{x}) &\approx \sum_{j=1}^n w_j \sum_{|p| \leq k} \frac{ \left. D_{y}^{p}(\bvec{x},\bvec{y}) \right|_{\bvec{y}=\bvec{\hat{c}}}}{p!} (\bvec{y}^{(j)} - \bvec{\hat{c}})^{p} \\
+            &= \sum_{|p| \leq k} \frac{ \left. D_{y}^{p}(\bvec{x},\bvec{y}) \right|_{\bvec{y}=\bvec{\hat{c}}}}{p!} \sum_{j=1}^n w_j (\bvec{y}^{(j)} - \bvec{\hat{c}})^{p} \\
+            &= \sum_{|p| \leq k} \frac{ \left. D_{y}^{p}(\bvec{x},\bvec{y}) \right|_{\bvec{y}=\bvec{\hat{c}}}}{p!} \hat{\alpha}_p
+   \end{align*}
+   
+   The main savings we can try to obtain is by finding a relationship between $\lbrace \alpha_p \rbrace $ and $\lbrace \hat{\alpha}_p \rbrace$. If we start out with some arbitrary $\hat{\alpha}_q$, we can derive the relationship below:
+
+   \begin{align*}
+    \hat{\alpha}_q &= \sum_j^n w_j \left(\bvec{y}^{(j)} - \bvec{\hat{c}}\right)^q \\
+    &= \sum_j^n w_j \left( \left(\bvec{y}^{(j)} - \bvec{c}\right) +  \left(\bvec{c} - \bvec{\hat{c}}\right) \right)^q \\
+    &= \sum_j^n w_j \prod_{i=1}^d \left( \left(y^{(j)}_i - c_i\right) +  \left(c_i - \hat{c}_i \right) \right)^{q_i} \\
+    &= \sum_j^n w_j \prod_{i=1}^d \sum_{ l_i = 0 }^{q_i} \binom{q_i}{l_i} \left(y^{(j)}_i - c_i\right)^{l_i} \left(c_i - \hat{c}_i \right)^{q_i - l_i} \\
+    &= \sum_{ l_1 = 0 }^{q_1} \sum_{ l_2 = 0 }^{q_2} \cdots \sum_{ l_d = 0 }^{q_d} \binom{q_1}{l_1} \cdots \binom{q_d}{l_d} \left(\bvec{c} - \bvec{\hat{c}} \right)^{q - l} \sum_j^n w_j \left(y^{(j)}_1 - c_1\right)^{l_1} \cdots \left(y^{(j)}_d - c_d\right)^{l_d} \\
+    &= \sum_{ l \leq q } \binom{q}{l}\left(\bvec{c} - \bvec{\hat{c}} \right)^{q - l} \alpha_l
+   \end{align*}
+
+   where $l = \left(l_1, \cdots, l_d\right)$ and $q = \left(q_1, \cdots, q_d\right)$. As we can see, an exact relationship can be formed between $\lbrace \alpha_p \rbrace $ and $\lbrace \hat{\alpha}_p \rbrace$, independent of the kernel $G(\cdot, \cdot)$, allowing for an $O(m k^d)$ computation to go from one set to the other given $k$ is the complete basis order used in the multipole expansion and $m$ is the number of elements in the sets $\lbrace \alpha_p \rbrace $ and $\lbrace \hat{\alpha}_p \rbrace$. Comparing this to an $O(mn)$ computation in the case of computing $\lbrace \hat{\alpha}_p \rbrace$ using source locations, we can see that the above algorithm for multipole translations can produce a more efficient computation when $n > k^d$.
+
+   \newpage
+   \subsection{Error Analysis}
+   In the last section we found the computational expense using the Multipole to Multipole translator could prove more efficient than computing the multipole expansion from scratch. Given that, it is left to see if the accuracy is any different between the two cases. Before getting too far in investigating this, let us assume we have an error bound for the multipole expansion about $\bvec{c}$ with the following form:
+
+   \begin{align*}
+    \left| \sum_{i=1}^m \psi(x^{(i)}) - \sum_{i=1}^m \sum_{|p| \leq k} \frac{ \left. D_{y}^{p}(\bvec{x}^{(i)},\bvec{y}) \right|_{\bvec{y}=\bvec{c}}}{p!} \alpha_p \right|_2 &= C \left( \frac{\max_{j} |\bvec{y}^{(j)} - \bvec{c}|}{\min_i |\bvec{x}^{(i)} - \bvec{c}|} \right)^{k+1} \\
+    &= C \rho^{k+1}
+   \end{align*}
+   
+   From here, let us first derive the error bound for the multipole expansion about $\bvec{\hat{c}}$, following similar steps to how we would arrive at the above error bound. First let us note a bound on the derivatives, given $G(\bvec{x},\bvec{y}) = \log\left(|\bvec{x} - \bvec{y}|_2\right)$, being in the form shown below:
+
+   \begin{align*}
+    \left| D^{p}_y (\bvec{x},\bvec{y}) \right|_2 &\leq C_p 
+      \begin{cases}
+        \log(R) & |p| = 0 \\
+        R^{-|p|} & |p| > 0
+      \end{cases}
+   \end{align*}
+
+   where $R = |\bvec{x} - \bvec{y}|_2$. Note the following useful inequality as well:
+
+   \begin{align*}
+    \left| \bvec{h}^p \right|_2 &= \left| \prod_{k=1}^d h_k^{p_k}\right|_2 \\
+    & \leq \max_k \left| h_k\right|^{|p|} \\
+    %
+    & \leq \left| \bvec{h} \right|_2^{|p|}
+   \end{align*}
+
+   With this, we can show two different error bounds based on a single expansion term. The first bound can be found by performing the steps shown below:
+
+   \begin{align*}
+    \left| \frac{ \left. D_{y}^{p}(\bvec{x},\bvec{y}) \right|_{\bvec{y}=\bvec{c}}}{p!} \left(\bvec{y} - \bvec{c}\right)^p \right|_2 &\leq \left| \left. D_{y}^{p}(\bvec{x},\bvec{y}) \right|_{\bvec{y}=\bvec{c}} \right|_2 \left| \bvec{y} - \bvec{c} \right|_2^{|p|} \\
+    %
+    &\leq C_p \left(\frac{\left| \bvec{y} - \bvec{c} \right|_2}{\left| \bvec{x} - \bvec{c} \right|_2} \right)^{|p|}
+   \end{align*}
+
+   The second error bound can be found using the set $\lbrace \alpha_p \rbrace$ and doing the following:
+   \begin{align*}
+    \left| \frac{ \left. D_{y}^{p}(\bvec{x},\bvec{y}) \right|_{\bvec{y}=\bvec{c}}}{p!} \alpha_p \right|_2 &\leq \left| \left. D_{y}^{p}(\bvec{x},\bvec{y}) \right|_{\bvec{y}=\bvec{c}} \right|_2 \left| \alpha_p \right|_2\\
+    %
+    &\leq C_p\frac{\left|\alpha_p\right|}{\left| \bvec{x} - \bvec{c} \right|_2^{|p|} }
+   \end{align*}
+
+   If we use the second error bound and related it to the known error bound for the expansion about $\bvec{c}$, we can arrive at a relationship with the $\lbrace \alpha_p \rbrace$, as shown below:
+
+   \begin{align*}
+    \left| \sum_{i=1}^m \psi(x^{(i)}) - \sum_{i=1}^m \sum_{|p| \leq k} \frac{ \left. D_{y}^{p}(\bvec{x}^{(i)},\bvec{y}) \right|_{\bvec{y}=\bvec{c}}}{p!} \alpha_p \right|_2 &\leq \bar{C} \left| \sum_{i=1}^m \sum_{|p| = k+1} \frac{ \left. D_{y}^{p}(\bvec{x}^{(i)},\bvec{y}) \right|_{\bvec{y}=\bvec{c}}}{p!} \alpha_p \right|_2 \\
+    %
+    &\leq \bar{C}  \max_{i} \sum_{|p| = k+1} \left| \left. D_{y}^{p}(\bvec{x}^{(i)},\bvec{y}) \right|_{\bvec{y}=\bvec{c}} \alpha_p \right|_2 \\
+    %
+    &\leq \bar{C}  \max_{i} \sum_{|p| = k+1} C_p\frac{\left|\alpha_p\right|}{\left| \bvec{x} - \bvec{c} \right|_2^{|p|} } \\
+    %
+    &\leq \bar{C} \sum_{|p| = k+1} C_p \frac{\left| \alpha_p \right|}{ \min_i \left|\bvec{x^{(i)}} - \bvec{c}\right|_2^{k+1}} \\
+    %
+    &\leq \bar{C} \frac{ \max_{p} \left| \alpha_p \right|}{\min_i \left|\bvec{x}^{(i)} - \bvec{c}\right|_2^{k+1}} \\
+    %
+    &\leq C \rho^{k+1}
+   \end{align*}
+
+   The above result implies that $\max_p |\alpha_p| \leq \hat{C} \min_i \left|\bvec{x}^{(i)} - \bvec{c}\right|_2^{k+1} \rho^{k+1}$ for some constant $\hat{C}$. With all this work done ahead of time, we can now find the first error bound for the new multipole expansion assuming we know the locations of the sources. We can do this using similar steps to those used by the original multipole expansion, like so:
+
+   \begin{align*}
+    \left| \sum_{i=1}^m \psi(x^{(i)}) - \sum_{i=1}^m \sum_{j=1}^n \sum_{|p| \leq k} \frac{ \left. D_{y}^{p}(\bvec{x}^{(i)},\bvec{y}) \right|_{\bvec{y}=\bvec{\hat{c}}}}{p!} \left(\bvec{y}^{(j)} - \bvec{\hat{c}}\right)^p \right|_2 &\leq \bar{C} \left| \sum_{i=1}^m \sum_{j=1}^n \sum_{|p| = k+1} \frac{ \left. D_{y}^{p}(\bvec{x}^{(i)},\bvec{y}) \right|_{\bvec{y}=\bvec{\hat{c}}}}{p!} \left(\bvec{y}^{(j)} - \bvec{\hat{c}}\right)^p \right|_2 \\
+    %
+    &\leq \hat{C} \max_{i,j,p}\left| \left. D_{y}^{p}(\bvec{x}^{(i)},\bvec{y}) \right|_{\bvec{y}=\bvec{\hat{c}}}\right|_2 \left| \left(\bvec{y}^{(j)} - \bvec{\hat{c}}\right)^p\right|_2 \\
+    %
+    &\leq \hat{C} \left( \frac{ \max_j |\bvec{y}^{(j)} - \bvec{\hat{c}}|_2}{\min_i |\bvec{x}^{(i)} - \bvec{\hat{c}}|_2 }\right)^{k+1} \\
+    %
+    &\leq \hat{C} \hat{\rho}^{k+1}
+   \end{align*}
+
+   We can see the multipole expansion about $\bvec{\hat{c}}$ shares a similar expression to the error from $\bvec{c}$, as expected. We can note that for this error bound, it is dependent on the order of the expansion, $k$, the largest distance between a source and the new center, and the smallest distance between the new center and a target location. Now let us assume we do not know the location of the source terms $\lbrace \bvec{y}^{(j)}\rbrace$, we can find the error expression for the multipole expansion about $\bvec{\hat{c}}$ like so:
+
+   \begin{align*}
+   \left| \sum_{i=1}^m \psi(x^{(i)}) - \sum_{i=1}^m \sum_{|p| \leq k} \frac{ \left. D_{y}^{p}(\bvec{x}^{(i)},\bvec{y}) \right|_{\bvec{y}=\bvec{\hat{c}}}}{p!} \hat{\alpha}_p \right|_2 &\leq \bar{C} \left| \sum_{i=1}^m \sum_{|p| = k+1} \frac{ \left. D_{y}^{p}(\bvec{x}^{(i)},\bvec{y}) \right|_{\bvec{y}=\bvec{\hat{c}}}}{p!} \hat{\alpha}_p \right|_2 \\
+   %
+   &\leq \bar{C} \max_{i} \sum_{|p| = k+1} \left| \left. D_{y}^{p}(\bvec{x}^{(i)},\bvec{y}) \right|_{\bvec{y}=\bvec{\hat{c}}} \right|_2 \left| \hat{\alpha}_p \right|_2 \\
+   %
+   &\leq \bar{C} \sum_{|p| = k+1} C_p \frac{\left| \sum_{ l \leq p } \binom{p}{l}\left(\bvec{c} - \bvec{\hat{c}} \right)^{p - l} \alpha_l \right|_2}{\min_i |\bvec{x}^{(i)} - \bvec{\hat{c}}|_2^{k+1}} \\
+   &\leq \bar{C} \frac{ \left| \bvec{c} - \bvec{\hat{c}}\right|_2^{k+1} \min_i \left|\bvec{x}^{(i)} - \bvec{c}\right|_2^{k+1} \rho^{k+1} }{\min_i |\bvec{x}^{(i)} - \bvec{\hat{c}}|_2^{k+1}} \\
+   &= \bar{C} \frac{ \left| \bvec{c} - \bvec{\hat{c}}\right|_2^{k+1} \min_i \left|\bvec{x}^{(i)} - \bvec{c}\right|_2^{k+1} \rho^{k+1} }{\min_i | \left(\bvec{x}^{(i)} - \bvec{c}\right) + \left(\bvec{c} - \bvec{\hat{c}}\right)|_2^{k+1}} \\
+   &\leq \bar{C} \frac{ \left| \bvec{c} - \bvec{\hat{c}}\right|_2^{k+1} \min_i \left|\bvec{x}^{(i)} - \bvec{c}\right|_2^{k+1} \rho^{k+1} }{\min_i | \bvec{x}^{(i)} - \bvec{c} |_2^{k+1}} \\
+   &\leq \bar{C} \left| \bvec{c} - \bvec{\hat{c}}\right|_2^{k+1} \rho^{k+1} \\
+   \end{align*}
+
+   The bound found above shows that the error for the multipole expansion, based on the translation operator, is propertional to the error of the original multipole expansion about $\bvec{c}$. Additionally, this operation shows that the error is proportional to the distance translated taken to a power proportional to the complete expansion order. This implies that taking a large translation will induce more error than a small translation. Note that this error bound is also dependent on the order of expansion and the error estimate of the old expansion, which was dependent on the furthest distance between a source and the old center and the smallest distance between the old center and a target location.
+
+
+\end{document}

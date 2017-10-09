@@ -1,0 +1,5 @@
+\select@language {english}
+\contentsline {section}{\numberline {1}Multi-index Notation}{3}
+\contentsline {section}{\numberline {2}Multipole to Multipole Translation}{3}
+\contentsline {subsection}{\numberline {2.1}Translation Derivation and Discussion}{3}
+\contentsline {subsection}{\numberline {2.2}Error Analysis}{6}
