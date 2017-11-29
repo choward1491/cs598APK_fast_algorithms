@@ -1,0 +1,110 @@
+\documentclass{article}[11pt]
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{cancel}
+\usepackage{enumitem}
+\renewcommand{\qedsymbol}{\rule{0.7em}{0.7em}}
+%\renewcommand{\theenumi}{\Alph{enumi}.}
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+%\usepackage[nottoc]{tocbibind} %Adds "References" to the table of contents
+
+\newcommand{\bvec}[1]{\boldsymbol{#1}}
+
+\newtheorem{lemma}{Result}[section]
+
+\makeatletter
+\newcommand{\chapterauthor}[1]{%
+  {\parindent0pt\vspace*{-25pt}%
+  \linespread{1.1}\large\scshape#1%
+  \par\nobreak\vspace*{35pt}}
+  \@afterheading%
+}
+\makeatother
+
+\title{Homework 4 - Problem 1\\ Systems of integral equations: Theory }
+\author{Christian Howard \\ howard28@illinois.edu }
+\date{}
+
+
+
+
+\begin{document}
+   \maketitle
+   
+   \newpage
+   
+   \tableofcontents
+   
+   \newpage
+  
+   \section{Normed Spaces}
+   Let $X_i \; \forall i = 1, \cdots, n$ be complete Banach spaces with norms $\norm{\cdot}_i$. For this first problem, the goal is to show that the product space $X := X_1 \times \cdots \times X_n $, with $n$-tuple elements of the form $\phi = \left( \phi_1, \cdots, \phi_n \right)$, are a normed space given this product space has a maximum norm defined in the following manner:
+   
+   \begin{align}
+   \norm{\phi}_{\infty} &= \max_{i = 1, \cdots, n} \norm{\phi_i}_i
+   \end{align} 
+   
+   To show this, we need to show that the following properties exist for some $x,y \in X$:
+   \begin{enumerate}
+   	\item $\norm{x}_\infty \geq 0$ and $\norm{x}_\infty = 0 \iff x = 0$
+   	\item $\norm{\alpha x}_\infty = |\alpha| \norm{x}_\infty$ for some scalar $\alpha$
+   	\item $\norm{x + y}_\infty \leq \norm{x}_\infty + \norm{y}_\infty$
+   \end{enumerate}
+
+\subsection{Property 1}
+	We can easily show that 1 holds. First, let's plug in $\phi = \left(0, \cdots, 0\right)$ and see the following:
+	\begin{align*}
+	\norm{\phi}_{\infty} &= \max_{i = 1, \cdots, n} \norm{\phi_i}_i \\
+	&= \max_{i = 1, \cdots, n} \norm{0}_i \\
+	&= 0
+	\end{align*}
+	
+	The above work trivially shows the above norm can only be zero if $\phi$ is zero in all of its elements. Now let's assume there exists some index subset $J \subset \lbrace 1, 2, \cdots, n\rbrace$ such that $\phi_k \neq 0$ $\forall k \in J$ , and all other elements are 0. We can find the following:
+	\begin{align*}
+	\norm{\phi}_{\infty} &= \max_{i = 1, \cdots, n} \norm{\phi_i}_i \\
+	&= \max_{i \in J} \norm{\phi_i}_i  \\
+	&\geq 0
+	\end{align*}
+   
+   The above results show that $\norm{\phi}_{\infty}$ satisfies property 1.
+   
+   \subsection{Property 2}
+   Let us assume $\hat{\phi} = \alpha \phi = \left( \alpha \phi_1, \cdots, \alpha \phi_n \right)$. Then we can work out the following:
+   
+   \begin{align*}
+   \norm{\hat{\phi}}_{\infty} = \norm{\alpha \phi}_{\infty}&= \max_{i = 1, \cdots, n} \norm{\alpha \phi_i}_i \\
+   &= \max_{i = 1, \cdots, n} |\alpha| \norm{\phi_i}_i \\
+   &= |\alpha| \max_{i = 1, \cdots, n} \norm{\phi_i}_i \\
+   &= |\alpha| \norm{\phi}_{\infty}
+   \end{align*}
+   
+   Thus we can see that property 2 is satisfied.
+   
+   \subsection{Property 3}
+   Let us show that $\norm{x+y}_\infty \leq \norm{x}_\infty + \norm{y}_\infty$ for $x,y \in X$.
+   \begin{align*}
+   \norm{x+y}_\infty &= \max_i \norm{x_i + y_i}_i \\
+   &\leq \max_i \norm{x_i}_i + \norm{y_i}_i \\
+   &\leq \left(\leq \max_i \norm{x_i}_i \right) + \left(\max_i \norm{y_i}_i\right) \\
+   &= \norm{x}_{\infty} + \norm{y}_{\infty}
+   \end{align*}
+   
+   Thus, $\norm{x+y}_\infty \leq \norm{x}_\infty + \norm{y}_\infty$ holds and Properties 1, 2, and 3 are satisfied, showing that $\left(X, \norm{\cdot}_{\infty}\right)$ together represent a normed vector space.
+   
+   \section{Composite Operators}
+   The goal of this part is to show that $\left(A\phi\right)_i = \sum_{k=1}^n A_{ik} \phi_k$ is compact $\forall i$ iff $A_{ik}: X_k \rightarrow X_i$ is compact $\forall i,k$. Let us define the below statements:
+   
+   \begin{align}
+   \left(A\phi\right)_i = \sum_{k=1}^n A_{ik} \phi_k \text{ is compact } \forall i \label{eq:s1}\\
+   A_{ik}: X_k \rightarrow X_i \text{ is compact } \forall i,k \label{eq:s2}
+   \end{align}
+   
+   If (\ref{eq:s2}) is true, then it holds that for each bounded sequence $\left(\phi_k(m)\right)$ in $X_k$, some subsequence of $\left(A_{ik}\phi_k(m)\right)$ is convergent in $X_i$. This means $\left(A\phi\right)_i = \sum_{k=1}^n A_{ik} \phi_k$ must be convergent $\forall i,k$, since each term of the summation converges, and in turn implies (\ref{eq:s1}) is true.
+   
+   Let us assume that (\ref{eq:s1}) holds and that $\exists j,l \ni A_{jl}$ is not compact. This means that $\left(A\phi\right)_j = \sum_{k=1}^n A_{jk} \phi_k$ is not compact for some $j$ because the sum is not convergent based on some bounded sequence $\left(\phi(m)\right)$. Since $\left(A\phi\right)_j$ is not convergent for some $j$, then $A\phi$ is not compact. Due to this contradiction, we see that (\ref{eq:s1}) implies that (\ref{eq:s2}) must be true. 
+
+\end{document}
