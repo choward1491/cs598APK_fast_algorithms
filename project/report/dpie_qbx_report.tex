@@ -41,10 +41,14 @@
 	% create the title page 
 	\maketitle
 	\begin{abstract}
-		A set of classifiers were built that could be used to predict if an individual has Major Depression given fMRI data about them performing a set of tasks. To accomplish this task, a dense fMRI dataset was coarsened via a local voxel averaging scheme and then features were discovered using Principal Component Analysis (PCA) and Non-negative Matrix Factorization (NMF). Using the new feature representations, classifiers were constructed using the following approaches: Random Forests (RFs), Gaussian Discriminant Analysis (GDA), and a Deep Neural Network (DNN). All of the above classification methods had high testing accuracy. This high accuracy was interesting and appears to stem from the feature representation causing the reduced data to be very separable with respect to their classes.
+		For this project, work has been done to implement a model in \textbf{pytential} that uses the Decoupled Potential Integral Equations (DPIE) along with Quadrature by Expansion (QBX) to solve Maxwell's equations for electromagnetic scattering problems with perfect conductor assumptions. The benefit of the DPIE formulation is that one can avoid topology related errors and obtain better numerical properties as a function of frequency for DPIE compared to common models such as the Magnetic Field Integral Equations (MFIE). This report summarizes the theory behind the MFIE and DPIE and arrives at the DPIE system of integral equations that must be solved. This report also comments on QBX and the software component of the project. References to the software being developed can be found at the end of the report.
 	\end{abstract}
-	\newpage
 	
+	\newpage
+	% create table of contents on separate page
+	\tableofcontents
+	
+	\newpage
 	% project goal
 	
 	\section{The Goal}
@@ -367,8 +371,24 @@
 	The above model still needs to be tested and so the associated test scripts are still being developed.
 	
 	\section{Numerical Results}
-	As of writing this, no numerical results have yet been obtained. The current code is still in the process of being debugged and validated appropriately, but this report will be updated as progress is made. You can find the updated report at: 
+	As of writing this, no numerical results have yet been obtained. The current code is still in the process of being debugged and validated appropriately, but this report will be updated as progress is made. You can find the updated report \href{https://github.com/choward1491/cs598APK_fast_algorithms/blob/master/project/report/dpie_qbx_report.pdf}{here} as numerical results come out.
 	
+	\newpage
+	\section{Useful Links}
+	\begin{itemize}
+		\item Path to forked \textbf{pytential} repo
+		\begin{itemize}
+			\item \href{https://github.com/choward1491/pytential}{https://github.com/choward1491/pytential}
+		\end{itemize}
+		\item Path to main \textbf{pytential} repo
+		\begin{itemize}
+			\item \href{https://github.com/inducer/pytential}{https://github.com/inducer/pytential}
+		\end{itemize}
+		\item Path to project materials, including presentation and report
+		\begin{itemize}
+			\item \href{https://github.com/choward1491/cs598APK_fast_algorithms/tree/master/project}{https://github.com/choward1491/cs598APK\_fast\_algorithms/tree/master/project}
+		\end{itemize}
+	\end{itemize}
 
 
 	\newpage	
