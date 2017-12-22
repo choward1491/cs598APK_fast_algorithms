@@ -1,0 +1,14 @@
+\BOOKMARK [1][-]{section.1}{The Goal}{}% 1
+\BOOKMARK [1][-]{section.2}{A Little Context}{}% 2
+\BOOKMARK [2][-]{subsection.2.1}{Industry needs Robustness and Efficiency}{section.2}% 3
+\BOOKMARK [1][-]{section.3}{Electromagnetic Scattering on Perfect Conductors}{}% 4
+\BOOKMARK [2][-]{subsection.3.1}{Fundamental Formulation}{section.3}% 5
+\BOOKMARK [2][-]{subsection.3.2}{Magnetic Field Integral Equation}{section.3}% 6
+\BOOKMARK [3][-]{subsubsection.3.2.1}{Formulation}{subsection.3.2}% 7
+\BOOKMARK [3][-]{subsubsection.3.2.2}{Problems with MFIE}{subsection.3.2}% 8
+\BOOKMARK [2][-]{subsection.3.3}{The Decoupled Potential Integral Equation}{section.3}% 9
+\BOOKMARK [3][-]{subsubsection.3.3.1}{Formulation}{subsection.3.3}% 10
+\BOOKMARK [1][-]{section.4}{Quadrature by Expansion}{}% 11
+\BOOKMARK [1][-]{section.5}{Software Implementation}{}% 12
+\BOOKMARK [1][-]{section.6}{Numerical Results}{}% 13
+\BOOKMARK [1][-]{section.7}{References}{}% 14
